@@ -32,5 +32,4 @@ telegram_text==0.2.0
 typing_extensions==4.12.2
 urllib3==2.2.2
 Werkzeug==3.0.0
-windows-curses==2.3.3
-WTForms==3.0.1
+
