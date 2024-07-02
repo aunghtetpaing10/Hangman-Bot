@@ -47,12 +47,14 @@ async def guess(update: Update, context: ContextTypes.DEFAULT_TYPE):
             game['guessed_letters'].add(user_guess)
             if user_guess in game['word_letters']:
                 game['word_letters'].remove(user_guess)
+                update.message.reply_text("Your guess is correct!")
                 if not game['word_letters']:
                     await update.message.reply_text(f"You won! The word was {game['word']}. Start a new game with /start")
                     del games[chat_id]
                     return
             else:
                 game['lives'] -= 1
+                update.message.reply_text("Your guess is wrong!")
                 if game['lives'] == 0:
                     await update.message.reply_text(f"Game Over. The correct word was {game['word']}. Start a new game with /start")
                     del games[chat_id]
