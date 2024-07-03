@@ -4,8 +4,9 @@ from hangman_visual import lives_visual_dict
 import string
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, ContextTypes, filters, Application
+import os
 
-TOKEN = "7229266823:AAEQxHTL7s_Xh1MTvL0ZPPvuvesckm27yL8"
+TOKEN = os.environ.get('Bot_Token')
 
 games = {}
 
