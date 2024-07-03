@@ -6,12 +6,18 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, ContextTypes, filters, Application
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
 TOKEN = os.getenv('Bot_Token')
+if not TOKEN:
+    raise ValueError("Bot token not found")
 
 games = {}
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_random_word(words):
     word = random.choice(words)
@@ -73,12 +79,15 @@ async def guess(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("That is not a valid letter. Please guess a single letter.")
 
 def main():
-    app = Application.builder().token(TOKEN).build()
+    try:
+        app = Application.builder().token(TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess ))
+        app.add_handler(CommandHandler("start", start))
+        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess ))
 
-    app.run_polling()
+        app.run_polling()
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":
