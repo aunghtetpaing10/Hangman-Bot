@@ -4,19 +4,13 @@ from hangman_visual import lives_visual_dict
 import string
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, ContextTypes, filters, Application
-import os
-from dotenv import load_dotenv
 import logging
+from config import *
 
-load_dotenv()
-
-TOKEN = os.getenv('Bot_Token')
-if not TOKEN:
-    raise ValueError("Bot token not found")
 
 games = {}
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 def get_random_word(words):
@@ -34,7 +28,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "word": word,
         "word_letters": set(word),
         "guessed_letters": set(),
-        "lives": 7
+        "lives": LIVES
     }
     await update.message.reply_text(f"Let's play Hangman! You have 7 lives. Guess a letter by typing it in.")
 
