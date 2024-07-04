@@ -3,12 +3,7 @@ from words import words
 from utils import game_message
 import string
 
-
-# Number of lives
-LIVES = 7
-
-# Game state
-games = {} 
+LIVES = 7 # Number of lives
 
 def get_random_word(words):
     """Get a random word from the words list."""
@@ -18,10 +13,10 @@ def get_random_word(words):
 
     return word.upper()
 
-def start_new_game(chat_id):
+def start_new_game(chat_id, context):
     """Start a new game for the chat"""
     word = get_random_word(words)
-    games[chat_id] = {
+    context.user_data[chat_id] = {
         "word": word,
         "word_letters": set(word),
         "guessed_letters": set(),
@@ -29,9 +24,9 @@ def start_new_game(chat_id):
     }
     return f"Let's play Hangman! You have 7 lives. Guess a letter by typing it in."
 
-def process_guess(chat_id, user_guess):
+def process_guess(chat_id, user_guess, context):
     """Process a user guess"""
-    game = games.get(chat_id)
+    game = context.user_data.get(chat_id)
     if game == None:
         return "Start a new game by typing /start"
 

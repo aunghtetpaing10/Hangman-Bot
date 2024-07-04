@@ -1,7 +1,7 @@
 import logging
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ConversationHandler
 from config import *
-from bot_handlers import start, guess
+from bot_handlers import start, guess, end
 
 # Config logging
 logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
@@ -12,8 +12,15 @@ def main():
     try:
         app = Application.builder().token(TOKEN).build()
 
-        app.add_handler(CommandHandler("start", start))
-        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess ))
+        conv_handler = ConversationHandler(
+            entry_points=[CommandHandler("start", start)],
+            states= {
+                "GUESS": [MessageHandler(filters.TEXT & ~filters.COMMAND, guess )]
+            },
+            fallbacks=[CommandHandler("end", end)],
+        )
+        
+        app.add_handler(conv_handler)
 
         app.run_polling()
     except Exception as e:
