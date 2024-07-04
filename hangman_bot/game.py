@@ -43,12 +43,12 @@ def process_guess(chat_id, user_guess, context):
     if user_guess in game["word_letters"]:
         game["word_letters"].remove(user_guess)
         if not game["word_letters"]:
-            del games[chat_id]
+            del context.user_data[chat_id]
             return f"You won! The word is {game['word']}. Start a new game with /start."
         return game_message(game, True)
     else:
         game["lives"] -= 1
         if game["lives"] == 0:
-            del games[chat_id]
+            del context.user_data[chat_id]
             return f"Game Over. The word is {game['word']}. Start a new game with /start"
         return game_message(game, False)
